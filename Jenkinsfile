@@ -4,7 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'devops-practice-app'
         DOCKERHUB_CREDENTIALS = credentials('DOCKERHUB_CREDENTIALS') // your Jenkins Docker Hub credential ID
-        DOCKERHUB_USERNAME = 'santhosh3670' // your Docker Hub username
+        DOCKERHUB_USERNAME = 'santhosh3016' // your Docker Hub username
     }
 
     stages {
