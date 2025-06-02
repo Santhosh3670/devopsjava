@@ -1,35 +1,53 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = 'devops-practice-app'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/your-username/devops-practice-app.git'
+               
+                git 'https://github.com/Santhosh3670/devopsjava.git'
             }
         }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("devops-practice-app:${env.BUILD_NUMBER}")
+                    docker.build("${IMAGE_NAME}:${env.BUILD_NUMBER}")
                 }
             }
         }
+
         stage('Run Tests') {
             steps {
                 sh 'npm test'
             }
         }
+
         stage('Push Image to Docker Hub') {
             environment {
-                DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-id')
+                // Replace with your Jenkins Docker Hub credentials ID
+                DOCKERHUB_CREDENTIALS = credentials('github-id')
             }
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'DOCKERHUB_CREDENTIALS') {
-                        docker.image("devops-practice-app:${env.BUILD_NUMBER}").push()
+                    docker.withRegistry('https://index.docker.io/v1/', 'DOCKERHUB_CREDENTIALS') {
+                        docker.image("${IMAGE_NAME}:${env.BUILD_NUMBER}").push()
+                        docker.image("${IMAGE_NAME}:${env.BUILD_NUMBER}").tag('latest')
+                        docker.image("${IMAGE_NAME}:latest").push()
                     }
                 }
             }
         }
     }
 }
+
