@@ -1,0 +1,27 @@
+---
+- name: Deploy Node.js Docker app
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Pull Docker image from Docker Hub
+      docker_image:
+        name: your-dockerhub-username/devops-practice-app
+        tag: latest
+        source: pull
+
+    - name: Stop and remove existing container
+      docker_container:
+        name: devops-app
+        state: absent
+        force_kill: yes
+        ignore_errors: yes
+
+    - name: Run Docker container
+      docker_container:
+        name: devops-app
+        image: your-dockerhub-username/devops-practice-app:latest
+        state: started
+        restart_policy: always
+        ports:
+          - "3000:3000"
