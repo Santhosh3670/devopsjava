@@ -6,12 +6,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-               
-                git 'https://github.com/Santhosh3670/devopsjava.git'
-            }
-        }
+        
 
         stage('Install Dependencies') {
             steps {
